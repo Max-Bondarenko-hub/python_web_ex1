@@ -4,6 +4,16 @@ import pickle
 from info import *
 import os
 
+class Logging():
+    def __init__(self, action):
+        self.action = action
+
+    def logging(self):
+        current_time = dt.strftime(dt.now(), '%H:%M:%S')
+        message = f'[{current_time}] {self.action}'
+        with open('logs.txt', 'a') as file:
+            file.write(f'{message}\n')
+
 
 class AddressBook(UserList):
     def __init__(self):
@@ -55,12 +65,6 @@ class AddressBook(UserList):
     def __getitem__(self, index):
         return self.data[index]
 
-    def log(self, action):
-        current_time = dt.strftime(dt.now(), '%H:%M:%S')
-        message = f'[{current_time}] {action}'
-        with open('logs.txt', 'a') as file:
-            file.write(f'{message}\n')
-
     def add(self, record):
         account = {'name': record.name,
                    'phones': record.phones,
@@ -69,21 +73,25 @@ class AddressBook(UserList):
                    'status': record.status,
                    'note': record.note}
         self.data.append(account)
-        self.log(f"Contact {record.name} has been added.")
+        log = Logging(f"Contact {record.name} has been added.")
+        log.logging()
 
     def save(self, file_name):
         with open(file_name + '.bin', 'wb') as file:
             pickle.dump(self.data, file)
-        self.log("Addressbook has been saved!")
+        log = Logging("Addressbook has been saved!")
+        log.logging()
 
     def load(self, file_name):
         emptyness = os.stat(file_name + '.bin')
         if emptyness.st_size != 0:
             with open(file_name + '.bin', 'rb') as file:
                 self.data = pickle.load(file)
-            self.log("Addressbook has been loaded!")
+            log = Logging("Addressbook has been loaded!")
+            log.logging()
         else:
-            self.log('Adressbook has been created!')
+            log = Logging('Adressbook has been created!')
+            log.logging()
         return self.data
 
     def search(self, pattern, category):
@@ -132,7 +140,8 @@ class AddressBook(UserList):
         except NameError:
             print('There is no such contact in address book!')
         else:
-            self.log(f"Contact {contact_name} has been edited!")
+            log = Logging(f"Contact {contact_name} has been edited!")
+            log.logging()
             return True
         return False
 
@@ -141,7 +150,8 @@ class AddressBook(UserList):
         for account in self.data:
             if account['name'] == pattern:
                 self.data.remove(account)
-                self.log(f"Contact {account['name']} has been removed!")
+                log = Logging(f"Contact {account['name']} has been removed!")
+                log.logging()
                 flag = True
             '''if pattern in account['phones']:
                         account['phones'].remove(pattern)

@@ -1,4 +1,14 @@
+from ABC import DataOutput
 from Bot import Bot
+
+
+class OutputCli(DataOutput):
+    def __init__(self, command, format_str):
+        self.command = command
+        self.format = format_str
+
+    def output_information(self):
+        print(self.format(self.command))
 
 
 if __name__ == "__main__":
@@ -11,7 +21,8 @@ if __name__ == "__main__":
         if action == 'help':
             format_str = str('{:%s%d}' % ('^',20))
             for command in commands:
-                print(format_str.format(command))
+                output = OutputCli(command, format_str)
+                output.output_information()
             action = input().strip().lower()
             bot.handle(action)
             if action in ['add', 'remove', 'edit']:

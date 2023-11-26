@@ -1,17 +1,15 @@
+from ABC import DataOutput
 from AddressBook import *
-from abc import ABC, abstractmethod
 
 
-class DisplayData(ABC):
-    @abstractmethod
-    def output_information(self) -> None:
-        pass
+class OutputCli(DataOutput):
+    def __init__(self, account) -> None:
+        self.account = account
 
-
-class OutputCli(DisplayData):
-    def __init__(self, addressbook: AddressBook) -> None:
-        self.addressbook = addressbook
-        pass
+    def output_information(self):
+        birth = self.account['birthday'].strftime("%d/%m/%Y")
+        result = "_" * 50 + "\n" + f"Name: {self.account['name']} \nPhones: {', '.join(self.account['phones'])} \nBirthday: {birth} \nEmail: {self.account['email']} \nStatus: {self.account['status']} \nNote: {self.account['note']}\n" + "_" * 50
+        print(result)
 
 
 class Bot:
@@ -35,9 +33,8 @@ class Bot:
             result = (self.book.search(pattern, category))
             for account in result:
                 if account['birthday']:
-                    birth = account['birthday'].strftime("%d/%m/%Y")
-                    result = "_" * 50 + "\n" + f"Name: {account['name']} \nPhones: {', '.join(account['phones'])} \nBirthday: {birth} \nEmail: {account['email']} \nStatus: {account['status']} \nNote: {account['note']}\n" + "_" * 50
-                    print(result)
+                    output = OutputCli(account)
+                    output.output_information()
         elif action == 'edit':
             contact_name = input('Contact name: ')
             parameter = input('Which parameter to edit(name, phones, birthday, status, email, note): ').strip()
