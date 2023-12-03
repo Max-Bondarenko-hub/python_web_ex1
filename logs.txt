@@ -68,3 +68,6 @@
 [19:41:08] Addressbook has been saved!
 [19:47:12] Addressbook has been loaded!
 [19:47:21] Addressbook has been saved!
+[17:04:43] Addressbook has been loaded!
+[17:05:25] Contact Max has been added.
+[17:05:25] Addressbook has been saved!
